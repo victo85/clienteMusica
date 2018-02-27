@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Songs| Cliente app música</title>
+
+	<meta charset="utf-8">
+
+	<link href="https://fonts.googleapis.com/css?family=Coming+Soon" rel='stylesheet' type='text/css'>
+
+	<!-- BOOTSTRAP -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<!--estilos -->
+	<link rel="stylesheet" href="styles.css">
+
+	<script type="text/javascript">
+
+	if(sessionStorage.getItem('token') != null){
+		var token = sessionStorage.getItem('token');
+	}else{
+		window.location.href="index.html";
+	}
+
+	$("#result").hide();
+	
+	$(document).ready(function(){ 
+
+		$.ajax({
+		    url:"http://h2744356.stratoserver.net/victor/apiPHPMusica/public/index.php/songs/songs.json",
+		    type: "GET",
+		    headers: { 'Authorization': token },
+		    dataType: 'json',
+		    success:function(response){
+
+		    	console.log(response);
+                
+	            $("#songsList").html("");
+	         
+				if($("#songsList").html() == ""){
+	                 
+	                $.each(response.data.songs, function(i, song) {
+	                      
+	                    $("#songsList").append("<li id='" + song.id + "'class='list-group-item'><span class='title'><a href='" + song.url_youtube + "'>" + song.title + "</a></span> -> <span class='artist'>" + song.artist + "</span>  <br>" + "<input type='button' name='edit' id='edit' onclick='editarCanciones(" + song.id + ")' class='btn btn-warning' value='Editar'>" + " " + "<input type='button' name='delete' id='delete' onclick='deleteSong(" + song.id + ")' class='btn btn-outline-danger' value='Borrar'>" + "</li>");
+	                        
+	                    })
+	            }
+            }    
+        });
+	});
+
+	function editarCanciones(id){
+		sessionStorage.setItem('idSongEdit', id);
+        window.location.href = "editarCancion.html";
+	}
+
+	function deleteSong(id){
+		
+
+	        $.ajax({
+			    url:"http://h2744356.stratoserver.net/victor/apiPHPMusica/public/index.php/songs/delete.json",
+			    type: "POST",
+			    headers: { 'Authorization': token },
+			    data:{
+			    	'id_song': id
+			    },
+			    dataType: 'json',
+			    success:function(response){
+
+			    	location.reload();
+	                
+	            }    
+			});
+		}
+
+	function IrAñadirCancion(){
+		window.location.href = "añadirCancion.html";
+	}
+
+	function logout(){
+		sessionStorage.clear();
+		window.location.href="index.html";
+	}
+
+	</script>
+
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Canciones</h1>
+		<h4>Aqui estan todas las canciones metidas por el admin</h4>
+
+		<hr>
+
+		<button class="btn btn-secondary btn-lg" onclick="IrAñadirCancion()">Añadir nueva canción</button>
+
+		<br>
+		<br>
+
+		<ul id="songsList">
+
+		</ul>
+		
+		<button class="btn btn-primary btn-lg" onclick="logout()">Cerrar sesión</button>
+	</div>
+	<br>
+	<br>
+	<br>
+
+</body>
+</html>

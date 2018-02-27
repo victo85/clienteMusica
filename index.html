@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cliente Musica</title>
+
+	<meta charset="utf-8">
+
+    <!-- link Fuente -->
+	<link href="https://fonts.googleapis.com/css?family=Coming+Soon" rel='stylesheet' type='text/css'>
+    	<!--estilos -->
+	<link rel="stylesheet" href="styles.css">
+
+
+	<!-- BOOTSTRAP -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+
+	$("#result").hide();
+	
+	$(document).ready(function(){ 
+
+		$("#submit").on("click",function(e){
+			var username = $("#username").val();
+			var password = $("#password").val();
+
+	        e.preventDefault();
+			$.get("http://h2744356.stratoserver.net/victor/apiPHPMusica/public/index.php/users/loginadmin.json", 
+				{'username': username,
+				 'password': password}, 
+
+				function(response){
+
+					if(response.code == "200"){
+						sessionStorage.setItem('token', response.data.token);
+            			window.location.href = "songs.html";
+					}else{
+						$("#result").show();
+						$("#result").html(response.message);
+					}
+        		}
+        	);
+		});
+	});
+	</script>
+
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Cliente Musica</h1>
+
+		<h4>Solo los admin pueden entrar</h4>
+
+		<hr>
+
+		<form>
+			<div class="form-group">
+				<br>
+				<input type="text" placeholder="Your username" name="username" id="username">
+				<br>
+				<br>
+				<input type="password" placeholder="Your password" name="password" id="password">
+				<br>
+				<br>
+				<input type="submit" class="btn btn-success" name="submit" value="Entrar" id="submit">
+				<br>
+			</div>
+		</form>
+        
+		<p id="result" class="alert alert-danger" style="display:none"></p>
+
+	</div>
+
+</body>
+</html>

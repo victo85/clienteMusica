@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AÑADIR CANCIÓN</title>
+
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Coming+Soon" rel='stylesheet' type='text/css'>
+
+	<!-- BOOTSTRAP -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script>
+
+	if(sessionStorage.getItem('token') != null){
+		var token = sessionStorage.getItem('token');
+	}else{
+		window.location.href="index.html";
+	}
+
+	$("#result").hide();
+
+    // variables de los campos addsong utilizados despues en la peticion get en la clase song
+	$( document ).ready(function() {
+    	$("#add").click(function() {
+	  		var title = $("#inputTitle").val();
+			var artist = $("#inputArtist").val();
+			var url = $("#inputURL").val();
+			// Se recoge la peticion al endpoint
+			$.ajax({
+			    url:"http://h2744356.stratoserver.net/victor/apiPHPMusica/public/index.php/songs/create.json",
+			    type: "POST",
+			    data: {
+			    	'title': title,
+			    	'artist': artist,
+			    	'url_youtube': url
+			    },
+			    headers: { 'Authorization': token },
+			    dataType: 'json',
+			    success:function(response){
+
+			    	if(response.code == 200){
+			    		$("#resultError").hide();
+			    		$("#resultSuccess").show();
+			    		$("#resultSuccess").html("Canción creada!!");
+			    		$("#form")[0].reset();
+			    	}else{
+						$("#resultSuccess").hide();
+			    		$("#resultError").show();
+			    		$("#resultError").html(response.message);
+			    	}
+
+	            }    
+	        });
+		});
+	});
+
+	function backToSongs(){
+		window.location.href = "songs.html";
+	}
+
+	</script>
+
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Añadir canción</h1>
+
+		<h4>Introduce una Cancion</h4>
+
+		<hr>
+
+		<form id="form">
+			<div class="form-group row">
+				<label for="inputTitle" class="col-sm-2 col-form-label">Titulo</label>
+
+				<div class="col-sm-12">
+					<input type="text" class="form-control" id="inputTitle" placeholder="Titulo">
+				</div>
+			</div>			
+			<div class="form-group row">
+				<label for="inputArtist" class="col-sm-2 col-form-label">Artista</label>
+				<div class="col-sm-12">
+					<input type="text" class="form-control" id="inputArtist" placeholder="Artista">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="inputURL" class="col-sm-2 col-form-label">URL YouTube</label>
+				<div class="col-sm-12">
+					<input type="text" class="form-control" id="inputURL" placeholder="URL">
+				</div>
+			</div>
+		</form>
+
+		<button class="btn btn-success" id="add">Añadir</button>
+		
+		<button class="btn btn-info" onclick="backToSongs()">Volver</button>
+
+		<br>
+		<br>
+        
+		<p id="resultError" class="alert alert-danger" style="display:none"></p>
+		<p id="resultSuccess" class="alert alert-primary" style="display:none"></p>
+
+	</div>
+
+</body>
+</html>

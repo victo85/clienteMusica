@@ -1,0 +1,51 @@
+
+span.title{
+	font-family: 'Coming Soon', cursive;
+	font-weight: 500;
+
+}
+
+span.artist{
+	font-family: 'Coming Soon', cursive;
+	font-weight: 300;
+}
+
+h1{
+	font-family: 'Coming Soon', cursive;
+	font-weight: 300;
+}
+h4{
+	font-family: 'Coming Soon', cursive;
+	font-weight: 230;
+}
+
+.list-group-item{
+	border-style: none;
+}
+
+.btn-outline-danger{
+	border-style: inset;
+}
+
+p#resultSuccess{
+	width: 200px;
+	color: black;
+}
+.btn-danger{
+	border-style: inset;
+	color: black;
+}
+.btn-secondary{
+	color: #34495E;
+	background: #A9DFBF;
+}
+.btn-primary{
+	color: #FFA07A;
+	background: #922B21;
+	width: 250px;
+}
+
+
+
+
+
